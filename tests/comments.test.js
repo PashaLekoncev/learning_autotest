@@ -1,9 +1,9 @@
 const {initDriver} = require("../utils/driver");
 const {expect, describe} = require("@jest/globals");
-const {logout} = require("../utils/logout");
-const {auth} = require("../utils/login");
-const {commentsLog, sendComment, getCommentContent, getToastErrorText} = require("../utils/post");
-const {getCountOfUserComment} = require("../utils/comment");
+const {logout} = require("../components/logout");
+const {auth} = require("../components/login");
+const {getCountOfUserComment, sendComment, commentsLog, getCommentContent} = require("../components/comment");
+const {getToastErrorText} = require("../components/erorrs");
 
 
 beforeAll(async () => {
@@ -30,7 +30,6 @@ describe("Проверка авторизации и пола пользоват
     ]
 
     test("Проверяем количество комментариев", async () => {
-        await auth("userA", 12345, driver)
         let countComments = await getCountOfUserComment()
         await sendComment(5, "duckduck12312")
         await commentsLog(5)

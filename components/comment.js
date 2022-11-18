@@ -1,9 +1,12 @@
+const {getPage, waitPageElementByCss} = require("../utils/driver");
 const {By} = require("selenium-webdriver");
-const {waitPageElementByCss} = require("./driver");
+const {getPost} = require("./post");
 
 
-async function getPost(postId) {
-    await driver.get(`https://stand4.pikabu.dev/story/_${postId}`)
+async function getCountOfUserComment() {
+    await getPage("comments")
+    let CountComments = await waitPageElementByCss("[pages=h4_section]>b", ...driverWithTimeout)
+    return Number(await CountComments.getText())
 }
 
 async function commentsLog(postId) {
@@ -22,17 +25,15 @@ async function sendComment(postId, text) {
     await getPost(postId)
     const commentInput = await waitPageElementByCss(".input__input.medium-editor-element", ...driverWithTimeout)
     await commentInput.sendKeys(text)
-    const submitComment = await waitPageElementByCss("button[class=button_success]", ...driverWithTimeout)
+    const submitComment = await waitPageElementByCss("button[pages=button_success]", ...driverWithTimeout)
     await submitComment.click()
     await driver.sleep(5000)
 }
-
 
 async function getComment(index) {
     const comments = await driver.findElements(By.css("div.comments__container .comment"))
     return comments.slice(index)
 }
-
 
 async function getCommentContent(index) {
     let [comment] = await getComment(index)
@@ -41,16 +42,10 @@ async function getCommentContent(index) {
 
 }
 
-async function getToastErrorText() {
-    let error = await waitPageElementByCss("div[class=toast__content]", ...driverWithTimeout)
-    return await error.getText()
-}
-
 module.exports = {
+    getCountOfUserComment,
     commentsLog,
-    getPost,
     sendComment,
     getComment,
     getCommentContent,
-    getToastErrorText
 }

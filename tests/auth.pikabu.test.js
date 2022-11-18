@@ -1,33 +1,31 @@
-const {initDriver, waitPageElementByCss, waitPageElement, refreshPage} = require("../utils/driver");
-const {expect, describe} = require("@jest/globals");
-const {logout} = require("../utils/logout");
-const {auth, getUserName} = require("../utils/login");
-const {changeGender, getUserGender} = require("../utils/settings");
-const {By} = require("selenium-webdriver");
+const {expect, describe, afterAll, beforeAll, test} = require("@jest/globals");
+const {Builder} = require("selenium-webdriver");
+const {AuthPage} = require("../pages/auth_page");
 
-
+let driver, page
 
 beforeAll(async () => {
-    driverWithTimeout = await initDriver(5000)
-    await auth("userA", 12345, driver)
+    driver = await new Builder().forBrowser("chrome").build()
+    page = await new AuthPage(driver)
+    await page.auth("userA", 12345)
 });
 
 
 afterAll(async() => {
-    await logout()
-    await driver.quit();
+    await page.logout()
+    await page.closeSession();
 });
 
 
 describe("Проверка авторизации и пола пользователя",  () => {
 
-    test('Авторизация с корректными данными - пикабу', async () => {
-        const exitBtn = await waitPageElementByCss(".user__exit", ...driverWithTimeout)
+    test('Авторизация с корректными данными - Пикабу', async () => {
+        const exitBtn = await page.exitBtn
         expect(await exitBtn.isDisplayed()).toBe(true)
     });
 
     test('Проверяет корректность отображения пола аккаунта - у самого пользователя', async () => {
-        await auth("userB", 12345, driver)
+        await page.auth("userB", 12345)
         const settings = await waitPageElementByCss("a[aria-label=\"Настройки\"]", ...driverWithTimeout)
         await settings.click()
         const gender = "Мужской"

@@ -1,4 +1,4 @@
-const {waitPageElementByCss, waitPageElement} = require("./driver");
+const {waitPageElementByCss, waitPageElement} = require("../utils/driver");
 const {By} = require("selenium-webdriver");
 
 
