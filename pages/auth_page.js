@@ -1,4 +1,4 @@
-const {BasePage} = require("./base_page");
+const {BasePage} = require("../pages/base_page");
 const {By} = require("selenium-webdriver");
 
 
@@ -17,6 +17,11 @@ class AuthPage extends BasePage{
     get exitBtn() {return this.waitPageElementByCss(".user__exit")}
     get acceptExitBtn() {return this.waitPageElementByCss(".button_danger")}
     get unAuthorizedForm() {return this.waitPageElement(By.xpath,`//div[@class="auth__header" and contains(text(), 'Авторизация')]`)}
+    get settingIcon() {return this.waitPageElementByCss("a[aria-label=\"Настройки\"]")}
+
+    async open() {
+        await this.openPage()
+    }
 
     async isUserAuthorized() {
         let isVisible = await this.userNameLabel
@@ -29,7 +34,7 @@ class AuthPage extends BasePage{
     }
 
     async auth(userName, password) {
-        await this.openPage();
+        await this.open();
         if (await this.isUserUnauthorized()) {
             await this.signIn(userName, password)
         }
@@ -49,9 +54,14 @@ class AuthPage extends BasePage{
     }
 
     async logout() {
-        await this.clickOn(await this.exitBtn)
-        await this.clickOn(await this.acceptExitBtn)
-        await this.isUserUnauthorized()
+        try {
+            await this.clickOn(await this.exitBtn)
+            await this.clickOn(await this.acceptExitBtn)
+            await this.isUserUnauthorized()
+        } catch (e) {
+            console.log("Пользователь уже разлогирован!")
+            return 0
+        }
     }
 
     async isUserUnauthorized() {

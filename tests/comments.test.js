@@ -1,24 +1,30 @@
-const {initDriver} = require("../utils/driver");
-const {expect, describe} = require("@jest/globals");
-const {logout} = require("../components/logout");
-const {auth} = require("../components/login");
-const {getCountOfUserComment, sendComment, commentsLog, getCommentContent} = require("../components/comment");
-const {getToastErrorText} = require("../components/erorrs");
+const {Builder} = require("selenium-webdriver");
+const {AuthPage} = require("../pages/auth_page");
+const {UserCommentsPage} = require("../pages/settings/user_comments_page");
+const {PostPage} = require("../pages/post_page");
+const {Notifications} = require("../components/notifications");
 
+
+
+let driver, page
 
 beforeAll(async () => {
-    driverWithTimeout = await initDriver(5000)
-    await auth("userA", 12345, driver)
+    driver = await new Builder().forBrowser("chrome").build()
+    page = await new AuthPage(driver)
+    await page.auth("userA", 12345)
 });
 
-
-afterAll(async() => {
-    await logout()
-    await driver.quit();
+afterEach(async () => {
+    page = await new AuthPage(driver)
 });
 
+afterAll(async () => {
+    await page.logout()
+    await page.closeSession();
+})
 
-describe("Проверка авторизации и пола пользователя",  () => {
+
+describe("Проверка комментариев", () => {
 
     const arrayComments = [
         [""],
@@ -30,21 +36,30 @@ describe("Проверка авторизации и пола пользоват
     ]
 
     test("Проверяем количество комментариев", async () => {
-        let countComments = await getCountOfUserComment()
-        await sendComment(5, "duckduck12312")
-        await commentsLog(5)
-        let newCountComments = await getCountOfUserComment()
+        page = new UserCommentsPage(driver)
+        await page.open()
+        let countComments = await page.getCountOfUserComment()
+        page = new PostPage(driver)
+        await page.open(5)
+        await page.sendComment(`duckduck${Math.floor(Math.random() * 999)}`)
+        await page.commentsLog(5)
+        page = new UserCommentsPage(driver)
+        await page.open()
+        let newCountComments = await page.getCountOfUserComment()
         expect(newCountComments).toBe(countComments + 1)
     });
 
     test.each(arrayComments)("Проверяем правильность написания комментария '%s'", async (comment) => {
-        await sendComment(5, comment)
+        page = await new PostPage(driver)
+        await page.open(10)
+        await page.sendComment(comment)
         if (comment === '') {
-            const errorText = await getToastErrorText()
+            let message = new Notifications(driver)
+            const errorText = await message.getToastText()
             expect(errorText).toBe("Введите текст сообщения или добавьте изображение")
         } else {
-            let lastComment = await getCommentContent(-1)
-            expect(comment).toBe(lastComment)
+            let lastComment = await page.getCommentContent(-1)
+            expect(lastComment).toBe(comment)
         }
     });
 

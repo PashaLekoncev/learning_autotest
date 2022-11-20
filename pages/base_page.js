@@ -2,7 +2,7 @@ const {until, By} = require("selenium-webdriver");
 
 
 class BasePage {
-    constructor(driver, timeout = 30000) {
+    constructor(driver, timeout = 5000) {
         require('dotenv').config()
         this.driver = driver
         this.timeout = timeout
