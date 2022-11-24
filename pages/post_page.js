@@ -6,12 +6,7 @@ const {By} = require("selenium-webdriver");
 
 class PostPage extends BasePage{
 
-    constructor(driver) {
-        super(driver);
-    }
-
-    get commentsOfPostArr() {return this.driver.findElements(By.css("div.comments__container .comment"))}
-    get commentBody() { return this.waitPageElementByCss(".comment__content")}
+    get commentsOfPostArr() {return driver.findElements(By.css("div.comments__container .comment"))}
     get commentInput() {return this.waitPageElementByCss(".input__input.medium-editor-element")}
     get submitComment() {return this.waitPageElementByCss("button[class=button_success]") }
 
@@ -19,6 +14,11 @@ class PostPage extends BasePage{
         await this.openPage(`story/_${postId}`)
         // ожидание появления блока комментариев
         await this.waitPageElementByCss(".input__input.medium-editor-element")
+    }
+
+    async searchPostTitle(title) {
+        let post = await this.waitPageElement(By.xpath, `//a[@class=\"story__title-link\" and contains(text(),"${title}")]`)
+        return !!post
     }
 
     // логирование комментариев поста

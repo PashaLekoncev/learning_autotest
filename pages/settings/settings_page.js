@@ -6,11 +6,6 @@ const {By} = require("selenium-webdriver");
 
 class SettingsPage extends BasePage {
 
-    constructor(driver) {
-        super(driver);
-    }
-
-
     get genderSelector() {return this.waitPageElementByCss("select[name=\"gender\"]")}
     get userInfo() {return this.waitPageElementByCss(".profile__user-information")}
     get getSelectedGender() {return this.waitPageElementByCss("option[selected=\"selected\"]")}

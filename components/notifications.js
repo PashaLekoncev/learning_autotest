@@ -3,10 +3,6 @@ const {By} = require("selenium-webdriver/lib/by");
 
 class Notifications extends BasePage{
 
-    constructor(driver) {
-        super(driver)
-    }
-
     async searchToastText(message) {
         try {
             let toast = await this.waitPageElement(By.xpath,`//div[@class="toast__content" and contains(text(), "${message}")]`)

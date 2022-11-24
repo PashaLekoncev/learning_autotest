@@ -1,26 +1,26 @@
-const {until, By} = require("selenium-webdriver");
+const {Builder, By, until} = require("selenium-webdriver");
+
+let driver =  new Builder().forBrowser('chrome').build();
 
 
 class BasePage {
-    constructor(driver, timeout = 5000) {
+
+    constructor(timeout = 5000) {
         require('dotenv').config()
-        this.driver = driver
+        global.driver = driver;
         this.timeout = timeout
     }
 
-    // async initDriver() {
-    //     return new Builder().forBrowser("chrome").build()
-    // } // TODO А можно чтобы работало так?)
 
     async goToUrl(url) {
-        await this.driver.get(url)
+        await driver.get(url)
     }
 
     async clickOn(element) {
         try {
             await element.click()
         } catch (e) {
-            await this.driver.executeScript("arguments[0].click();", element)
+            await driver.executeScript("arguments[0].click();", element)
         }
     }
 
@@ -30,12 +30,12 @@ class BasePage {
 
     async waitPageElementByCss(selector) {
         try {
-            let element = await this.driver.wait(until.elementLocated(By.css(selector)),
+            let element = await driver.wait(until.elementLocated(By.css(selector)),
                 this.timeout,
                 `Поиск элемента с селектором: "${selector}"`,
                 1000
             );
-            await this.driver.wait(until.elementIsVisible(element),
+            await driver.wait(until.elementIsVisible(element),
                 this.timeout,
                 `Ищем элемент с селектором "${selector}" на странице`,
                 1000
@@ -49,12 +49,12 @@ class BasePage {
 
     async waitPageElement(by,selector) {
         try {
-            let element = await this.driver.wait(until.elementLocated(by(selector)),
+            let element = await driver.wait(until.elementLocated(by(selector)),
                 this.timeout,
                 `Поиск элемента с селектором: "${selector}"`,
                 1000
             );
-            await this.driver.wait(until.elementIsVisible(element),
+            await driver.wait(until.elementIsVisible(element),
                 this.timeout,
                 `Ищем элемент с селектором "${selector}" на странице`,
                 1000
@@ -70,15 +70,15 @@ class BasePage {
         if (slug[0] === "/") {
             slug = slug.slice(1)
         }
-        await this.driver.get(process.env.HOST_NAME + slug)
+        await driver.get(process.env.HOST_NAME + slug)
     }
 
     async refreshPage() {
-        await this.driver.navigate().refresh()
+        await driver.navigate().refresh()
     }
 
     async closeSession() {
-        await this.driver.quit()
+        await driver.quit()
     }
 }
 

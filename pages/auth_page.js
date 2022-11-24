@@ -6,10 +6,6 @@ const {By} = require("selenium-webdriver");
 
 class AuthPage extends BasePage{
 
-    constructor(driver) {
-        super(driver);
-    }
-
     get login() {return this.waitPageElementByCss("input[placeholder=\"Логин\"]")}
     get password() {return this.waitPageElementByCss("input[placeholder=\"Пароль\"]")}
     get authBtn() {return this.waitPageElementByCss("#signin-form button")}
