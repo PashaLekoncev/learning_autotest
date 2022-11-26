@@ -2,16 +2,22 @@ const {BasePage} = require("../../pages/base_page");
 const {By} = require("selenium-webdriver");
 
 
-
-
 class SettingsPage extends BasePage {
+    
+    get genderSelector() {
+        return this.waitPageElementByCss("select[name=\"gender\"]")
+    }
 
-    get genderSelector() {return this.waitPageElementByCss("select[name=\"gender\"]")}
-    get userInfo() {return this.waitPageElementByCss(".profile__user-information")}
-    get getSelectedGender() {return this.waitPageElementByCss("option[selected=\"selected\"]")}
+    get userInfo() {
+        return this.waitPageElementByCss(".profile__user-information")
+    }
+
+    get getSelectedGender() {
+        return this.waitPageElementByCss("option[selected=\"selected\"]")
+    }
 
     async selectGender(gender) {
-        return this.waitPageElement(By.xpath,`//option[contains(text(), "${gender}")]`)
+        return this.waitPageElement(By.xpath, `//option[contains(text(), "${gender}")]`)
     }
 
     async open() {

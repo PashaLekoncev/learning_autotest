@@ -2,18 +2,39 @@ const {BasePage} = require("../pages/base_page");
 const {By} = require("selenium-webdriver");
 
 
+class AuthPage extends BasePage {
 
+    get login() {
+        return this.waitPageElementByCss("input[placeholder=\"Логин\"]")
+    }
 
-class AuthPage extends BasePage{
+    get password() {
+        return this.waitPageElementByCss("input[placeholder=\"Пароль\"]")
+    }
 
-    get login() {return this.waitPageElementByCss("input[placeholder=\"Логин\"]")}
-    get password() {return this.waitPageElementByCss("input[placeholder=\"Пароль\"]")}
-    get authBtn() {return this.waitPageElementByCss("#signin-form button")}
-    get userNameLabel() {return this.waitPageElementByCss("a.user__nick.user__nick_big")}
-    get exitBtn() {return this.waitPageElementByCss(".user__exit")}
-    get acceptExitBtn() {return this.waitPageElementByCss(".button_danger")}
-    get unAuthorizedForm() {return this.waitPageElement(By.xpath,`//div[@class="auth__header" and contains(text(), 'Авторизация')]`)}
-    get settingIcon() {return this.waitPageElementByCss("a[aria-label=\"Настройки\"]")}
+    get authBtn() {
+        return this.waitPageElementByCss("#signin-form button")
+    }
+
+    get userNameLabel() {
+        return this.waitPageElementByCss("a.user__nick.user__nick_big")
+    }
+
+    get exitBtn() {
+        return this.waitPageElementByCss(".user__exit")
+    }
+
+    get acceptExitBtn() {
+        return this.waitPageElementByCss(".button_danger")
+    }
+
+    get unAuthorizedForm() {
+        return this.waitPageElement(By.xpath, `//div[@class="auth__header" and contains(text(), 'Авторизация')]`)
+    }
+
+    get settingIcon() {
+        return this.waitPageElementByCss("a[aria-label=\"Настройки\"]")
+    }
 
     async open() {
         await this.openPage()
@@ -33,8 +54,7 @@ class AuthPage extends BasePage{
         await this.open();
         if (await this.isUserUnauthorized()) {
             await this.signIn(userName, password)
-        }
-        else if (await this.isUserAuthorized() && userName === await this.getUserNameLabel()) {
+        } else if (await this.isUserAuthorized() && userName === await this.getUserNameLabel()) {
             return null
         } else if (await this.isUserAuthorized() && userName !== await this.getUserNameLabel()) {
             await this.logout()

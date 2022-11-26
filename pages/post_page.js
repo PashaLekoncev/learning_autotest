@@ -2,13 +2,19 @@ const {BasePage} = require("../pages/base_page");
 const {By} = require("selenium-webdriver");
 
 
+class PostPage extends BasePage {
 
+    get commentsOfPostArr() {
+        return driver.findElements(By.css("div.comments__container .comment"))
+    }
 
-class PostPage extends BasePage{
+    get commentInput() {
+        return this.waitPageElementByCss(".input__input.medium-editor-element")
+    }
 
-    get commentsOfPostArr() {return driver.findElements(By.css("div.comments__container .comment"))}
-    get commentInput() {return this.waitPageElementByCss(".input__input.medium-editor-element")}
-    get submitComment() {return this.waitPageElementByCss("button[class=button_success]") }
+    get submitComment() {
+        return this.waitPageElementByCss("button[class=button_success]")
+    }
 
     async open(postId) {
         await this.openPage(`story/_${postId}`)
@@ -17,7 +23,7 @@ class PostPage extends BasePage{
     }
 
     async searchPostTitle(title) {
-        let post = await this.waitPageElement(By.xpath, `//a[@class=\"story__title-link\" and contains(text(),"${title}")]`)
+        let post = await this.waitPageElement(By.xpath, `//a[@class="story__title-link story__title-link_visited" and contains(text(),"${title}")]`)
         return !!post
     }
 

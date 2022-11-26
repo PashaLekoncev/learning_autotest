@@ -4,7 +4,6 @@ const {PostPage} = require("../pages/post_page");
 const {Notifications} = require("../components/notifications");
 
 
-
 let page
 
 beforeAll(async () => {

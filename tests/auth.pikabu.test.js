@@ -4,7 +4,6 @@ const {Notifications} = require("../components/notifications");
 
 let page
 
-
 beforeEach(async () => {
     page = await new AuthPage()
     await page.auth("userA", 12345)
@@ -21,9 +20,9 @@ afterAll(async () => {
 })
 
 
-describe("Проверка авторизации и пола пользователя",  () => {
+describe("Проверка авторизации и пола пользователя", () => {
     const genders = [
-        ["Не показывать"],["Женский"],["Мужской"]
+        ["Не показывать"], ["Женский"], ["Мужской"]
     ]
 
 

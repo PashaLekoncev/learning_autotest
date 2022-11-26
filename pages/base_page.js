@@ -1,6 +1,6 @@
 const {Builder, By, until} = require("selenium-webdriver");
 
-let driver =  new Builder().forBrowser('chrome').build();
+let driver = new Builder().forBrowser('chrome').build();
 
 
 class BasePage {
@@ -28,15 +28,15 @@ class BasePage {
         await element.sendKeys(text)
     }
 
-    async waitPageElementByCss(selector) {
+    async waitPageElementByCss(selector, timeout = this.timeout) {
         try {
             let element = await driver.wait(until.elementLocated(By.css(selector)),
-                this.timeout,
+                timeout,
                 `Поиск элемента с селектором: "${selector}"`,
                 1000
             );
             await driver.wait(until.elementIsVisible(element),
-                this.timeout,
+                timeout,
                 `Ищем элемент с селектором "${selector}" на странице`,
                 1000
             );
@@ -47,15 +47,15 @@ class BasePage {
         }
     }
 
-    async waitPageElement(by,selector) {
+    async waitPageElement(by, selector, timeout = this.timeout) {
         try {
             let element = await driver.wait(until.elementLocated(by(selector)),
-                this.timeout,
+                timeout,
                 `Поиск элемента с селектором: "${selector}"`,
                 1000
             );
             await driver.wait(until.elementIsVisible(element),
-                this.timeout,
+                timeout,
                 `Ищем элемент с селектором "${selector}" на странице`,
                 1000
             );
@@ -66,7 +66,7 @@ class BasePage {
         }
     }
 
-    async openPage(slug='') {
+    async openPage(slug = '') {
         if (slug[0] === "/") {
             slug = slug.slice(1)
         }
@@ -82,6 +82,6 @@ class BasePage {
     }
 }
 
-module.exports  = {
+module.exports = {
     BasePage
 }
