@@ -1,6 +1,6 @@
-const {BasePage} = require("../pages/base_page");
+const {BasePage} = require("./BasePage");
+const {PostPage} = require("./PostPage");
 const {By} = require("selenium-webdriver");
-const {PostPage} = require("./post_page");
 
 
 class EditorPage extends BasePage {
@@ -63,7 +63,7 @@ class EditorPage extends BasePage {
         }
     }
 
-    async addPost(title, body, tagsArr, community = '') {
+    async createPost(title, body, tagsArr, community = '') {
         await this.open()
         await this.writeTitle(title)
         await this.writeBody(body)
@@ -73,6 +73,7 @@ class EditorPage extends BasePage {
         await this.clickOn(await this.submitPostBtn)
         const page = new PostPage()
         await page.searchPostTitle(title)
+        await driver.sleep(10000)
     }
 
     async open() {

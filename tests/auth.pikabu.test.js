@@ -1,6 +1,5 @@
-const {AuthPage} = require("../pages/auth_page");
-const {SettingsPage} = require("../pages/settings/settings_page");
-const {Notifications} = require("../components/notifications");
+const {AuthPage, SettingsPage} = require("../pages");
+const {Notifications} = require("../components");
 
 let page
 
@@ -52,7 +51,7 @@ describe("Проверка авторизации и пола пользоват
         await page.logout()
         page = new SettingsPage()
         const gender = await page.getUserGender("userB")
-        expect(gender).toBe("Не показывать")
+        expect(gender).toBe("Мужской")
     });
 
     test("Тест авторизации и разлогинивания", async () => {

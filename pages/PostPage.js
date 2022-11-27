@@ -1,4 +1,5 @@
-const {BasePage} = require("../pages/base_page");
+const {BasePage} = require("./BasePage");
+const {Post} = require("../components");
 const {By} = require("selenium-webdriver");
 
 
@@ -16,6 +17,16 @@ class PostPage extends BasePage {
         return this.waitPageElementByCss("button[class=button_success]")
     }
 
+    get postElement() {
+        return this.waitPageElement(By.xpath, "//div[@class=\'page-story__story\']//article[@data-recom-algo]")
+    }
+
+    async getPost() {
+        let post = new Post(await this.postElement)
+        post = await post.init()
+        return post
+    }
+
     async open(postId) {
         await this.openPage(`story/_${postId}`)
         // ожидание появления блока комментариев
@@ -23,7 +34,7 @@ class PostPage extends BasePage {
     }
 
     async searchPostTitle(title) {
-        let post = await this.waitPageElement(By.xpath, `//a[@class="story__title-link story__title-link_visited" and contains(text(),"${title}")]`)
+        let post = await this.waitPageElement(By.xpath, `//span[@class="story__title-link" and contains(text(),"${title}")]`, 10000)
         return !!post
     }
 

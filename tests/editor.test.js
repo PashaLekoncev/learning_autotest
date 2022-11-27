@@ -1,13 +1,11 @@
-const {AuthPage} = require("../pages/auth_page");
-const {EditorPage} = require("../pages/editor_page");
-const {PostPage} = require("../pages/post_page");
+const {AuthPage, EditorPage, PostPage, FeedPage} = require("../pages");
 
 
 let page
 
 beforeAll(async () => {
     page = await new AuthPage()
-    await page.auth("userA", 12345)
+    await page.auth("userC", 12345)
 });
 
 afterEach(async () => {
@@ -25,8 +23,9 @@ describe("Проверка комментариев", () => {
         const postTitle = "TestBOMB"
 
         page = new EditorPage()
-        await page.addPost(postTitle, "Тело поста", ["Разное", "Экстрим"])
-        await page.openPage('new')
+        await page.createPost(postTitle, "Тело поста", ["Разное", "Экстрим"])
+        page = new FeedPage()
+        await page.open(FEEDS.new)
         page = new PostPage()
         let ans = await page.searchPostTitle(postTitle)
         expect(ans).toBe(true)

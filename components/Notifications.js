@@ -1,4 +1,4 @@
-const {BasePage} = require("../pages/base_page");
+const {BasePage} = require("../pages/BasePage");
 const {By} = require("selenium-webdriver/lib/by");
 
 class Notifications extends BasePage {

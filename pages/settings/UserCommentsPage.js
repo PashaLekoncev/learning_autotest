@@ -1,4 +1,4 @@
-const {BasePage} = require("../../pages/base_page");
+const {BasePage} = require("../BasePage");
 
 
 class UserCommentsPage extends BasePage {

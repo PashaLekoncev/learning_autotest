@@ -1,9 +1,9 @@
-const {BasePage} = require("../../pages/base_page");
+const {BasePage} = require("../BasePage");
 const {By} = require("selenium-webdriver");
 
 
 class SettingsPage extends BasePage {
-    
+
     get genderSelector() {
         return this.waitPageElementByCss("select[name=\"gender\"]")
     }

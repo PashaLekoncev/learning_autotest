@@ -1,7 +1,5 @@
-const {AuthPage} = require("../pages/auth_page");
-const {UserCommentsPage} = require("../pages/settings/user_comments_page");
-const {PostPage} = require("../pages/post_page");
-const {Notifications} = require("../components/notifications");
+const {AuthPage, UserCommentsPage, PostPage} = require("../pages");
+const {Notifications} = require("../components");
 
 
 let page
