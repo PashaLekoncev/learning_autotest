@@ -6,7 +6,7 @@ let page
 
 beforeAll(async () => {
     page = await new AuthPage()
-    await page.auth("userA", 12345)
+    await page.auth("userA", process.env.PASSWORD)
 });
 
 afterEach(async () => {

@@ -5,7 +5,7 @@ let page
 
 beforeEach(async () => {
     page = await new AuthPage()
-    await page.auth("userA", 12345)
+    await page.auth("userA", process.env.PASSWORD)
 })
 
 
@@ -55,8 +55,8 @@ describe("Проверка авторизации и пола пользоват
     });
 
     test("Тест авторизации и разлогинивания", async () => {
-        await page.auth("userB", 12345)
-        await page.auth("userB", 12345)
+        await page.auth("userB", process.env.PASSWORD)
+        await page.auth("userB", process.env.PASSWORD)
         console.log(await page.getUserNameLabel());
     });
 })

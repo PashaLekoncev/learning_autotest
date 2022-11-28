@@ -16,6 +16,18 @@ class AuthPage extends BasePage {
         return this.waitPageElementByCss("#signin-form button")
     }
 
+    get verificationInput() {
+        return this.waitPageElementByCss("input[placeholder=\"Код из SMS\"]")
+    }
+
+    get submitVerificationForm() {
+        return this.waitPageElementByCss(".popup__footer .button_success")
+    }
+
+    get closeVerificationForm() {
+        return this.waitPageElement(By.xpath, "//button[contains(text(), 'Закрыть')]")
+    }
+
     get userNameLabel() {
         return this.waitPageElementByCss("a.user__nick.user__nick_big")
     }
@@ -66,6 +78,10 @@ class AuthPage extends BasePage {
         await this.sendKeysOn(await this.login, login)
         await this.sendKeysOn(await this.password, password)
         await this.clickOn(await this.authBtn)
+        if (login === 'admin') {
+            await this.sendKeysOn(await this.verificationInput, process.env.VERIFICATION_PASSWORD)
+            await this.clickOn(await this.submitVerificationForm)
+        }
         await this.isUserAuthorized()
     }
 
