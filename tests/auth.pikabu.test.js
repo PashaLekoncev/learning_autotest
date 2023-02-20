@@ -5,13 +5,16 @@ let page
 
 beforeEach(async () => {
     page = await new AuthPage()
-    await page.auth("userA", process.env.PASSWORD)
+    await page.auth("userA", process.env.PASSWORD, {
+        name:"pkbRem",
+        value: "%7B%22uid%22%3A2038303%2C%22username%22%3A%22userA%22%2C%22rem%22%3A%22352d1c26f744f285377c8ad466fdac98%22%2C%22tries%22%3A0%7D"
+    })
 })
 
 
 afterEach(async () => {
     page = await new AuthPage()
-    await page.logout()
+    await page.logout(true)
 });
 
 afterAll(async () => {
@@ -23,7 +26,6 @@ describe("Проверка авторизации и пола пользоват
     const genders = [
         ["Не показывать"], ["Женский"], ["Мужской"]
     ]
-
 
     test('Авторизация с корректными данными - Пикабу', async () => {
         const exitBtn = await page.exitBtn

@@ -41,7 +41,7 @@ class AuthPage extends BasePage {
     }
 
     get unAuthorizedForm() {
-        return this.waitPageElement(By.xpath, `//div[@class="auth__header" and contains(text(), 'Авторизация')]`)
+        return this.waitPageElement(By.xpath, `//div[@class="auth__header auth__header" and contains(text(), 'Войти')]`)
     }
 
     get settingIcon() {
@@ -62,8 +62,12 @@ class AuthPage extends BasePage {
         return ans.getText()
     }
 
-    async auth(userName, password) {
+    async auth(userName, password, cookie=null) {
         await this.open();
+        if (cookie) {
+            await driver.manage().addCookie(cookie)
+            await this.refreshPage();
+        }
         if (await this.isUserUnauthorized()) {
             await this.signIn(userName, password)
         } else if (await this.isUserAuthorized() && userName === await this.getUserNameLabel()) {
@@ -85,8 +89,12 @@ class AuthPage extends BasePage {
         await this.isUserAuthorized()
     }
 
-    async logout() {
+    async logout(throughCookie=false) {
         try {
+            if(throughCookie) {
+                await driver.manage().deleteCookie("pkbRem")
+                await this.refreshPage();
+            }
             await this.clickOn(await this.exitBtn)
             await this.clickOn(await this.acceptExitBtn)
             await this.isUserUnauthorized()

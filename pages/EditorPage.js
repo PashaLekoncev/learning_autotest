@@ -18,7 +18,7 @@ class EditorPage extends BasePage {
     }
 
     get tagLabel() {
-        return this.waitPageElementByCss(".dropdown-item__highlight")
+        return this.waitPageElementByCss(".dropdown-item__label")
     }
 
     get communitiesInput() {
@@ -37,7 +37,7 @@ class EditorPage extends BasePage {
         await this.sendKeysOn(await this.titleInput, text)
     }
 
-    async writeBody(text) {
+    async writeContent(text) {
         await this.sendKeysOn(await this.bodyInput, text)
     }
 
@@ -63,16 +63,16 @@ class EditorPage extends BasePage {
         }
     }
 
-    async createPost(title, body, tagsArr, community = '') {
+    async createPost(post) {
         await this.open()
-        await this.writeTitle(title)
-        await this.writeBody(body)
-        await this.writeTag(tagsArr)
-        await this.writeCommunity(community)
+        await this.writeTitle(post.title)
+        await this.writeContent(post.content)
+        await this.writeTag(post.tags)
+        if (post.communityName) await this.writeCommunity(post.communityName)
         await this.waitSearchingDuplicatesOnPost()
         await this.clickOn(await this.submitPostBtn)
         const page = new PostPage()
-        await page.searchPostTitle(title)
+        await page.searchPostTitle(post.title)
         await driver.sleep(10000)
     }
 

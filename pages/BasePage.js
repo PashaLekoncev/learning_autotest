@@ -1,6 +1,17 @@
 const {Builder, By, until} = require("selenium-webdriver");
 
-let driver = new Builder().forBrowser('chrome').build();
+
+let driver = new Builder()
+    .usingServer("http://localhost:4444/wd/hub")
+    .withCapabilities({
+        "browserName": "chrome",
+        "version": "109.0",
+        "selenoid:options": {
+            "screenResolution": "1920x1024x24",
+            "enableVNC": true,
+            "enableVideo": true,
+        }})
+    .build()
 
 
 class BasePage {
