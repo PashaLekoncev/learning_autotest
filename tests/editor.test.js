@@ -1,17 +1,16 @@
-const {AuthPage, EditorPage, PostPage, FeedPage} = require("../pages");
+const {AuthPage, EditorPage, FeedPage} = require("../pages");
 const {PostBuilder} = require("../builders/PostBuilder");
-const {test} = require("@jest/globals");
 
 
-let page
+let page, post
 
 beforeAll(async () => {
     post = new PostBuilder()
-        .withTitle("Проверка")
-        .withContent("Тело поста")
-        .withCommunityName("olo")
+        .withTitle("ПроверкаTest123456880-=+_))(&^%?`")
+        .withContent("Tetst")
         .withTags(["Разное", "Экстрим"])
-        .build();
+        .withCommunityName("Сообщество нумизматов").build();
+
     page = await new AuthPage()
     await page.auth("userC", process.env.PASSWORD)
 });
@@ -26,14 +25,13 @@ afterAll(async () => {
 })
 
 
-describe("Проверка комментариев", () => {
+describe("Проверка редактора", () => {
     test('Проверка создания поста', async () => {
-        page = new EditorPage()
-        await page.createPost(post)
-        page = new FeedPage()
-        await page.open(FEEDS.new)
-        page = new PostPage()
-        let ans = await page.searchPostTitle(post.title)
+        page = await new EditorPage().createPost(post)
+        let feedPage = new FeedPage()
+        await feedPage.open(FEEDS.new)
+        post = await feedPage.getPost()
+        let ans = await feedPage.searchPostTitle(post.title)
         expect(ans).toBe(true)
     });
 })

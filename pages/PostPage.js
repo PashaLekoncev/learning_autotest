@@ -1,6 +1,7 @@
 const {BasePage} = require("./BasePage");
-const {Post} = require("../components");
 const {By} = require("selenium-webdriver");
+const {PostComponent} = require("../components/PostComponent");
+const {Post} = require("../models/Post");
 
 
 class PostPage extends BasePage {
@@ -18,13 +19,12 @@ class PostPage extends BasePage {
     }
 
     get postElement() {
-        return this.waitPageElement(By.xpath, "//div[@class=\'page-story__story\']//article[@data-recom-algo]")
+        return this.waitPageElement(By.xpath, "//article[@data-recom-algo]", 10000)
     }
 
     async getPost() {
-        let post = new Post(await this.postElement)
-        post = await post.init()
-        return post
+        let component = new PostComponent(await this.postElement)
+        return Post.createByComponent(component);
     }
 
     async open(postId) {
@@ -34,8 +34,9 @@ class PostPage extends BasePage {
     }
 
     async searchPostTitle(title) {
-        let post = await this.waitPageElement(By.xpath, `//span[@class="story__title-link" and contains(text(),"${title}")]`, 10000)
-        return !!post
+        let titleElement = await this.waitPageElement(By.xpath, `//h1[@class="story__title"]`)
+        let postTitle = await this.getTextOnElement(titleElement)
+        return postTitle === title
     }
 
     // логирование комментариев поста

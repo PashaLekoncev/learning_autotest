@@ -71,8 +71,7 @@ class EditorPage extends BasePage {
         if (post.communityName) await this.writeCommunity(post.communityName)
         await this.waitSearchingDuplicatesOnPost()
         await this.clickOn(await this.submitPostBtn)
-        const page = new PostPage()
-        await page.searchPostTitle(post.title)
+        await new PostPage().searchPostTitle(post.title)
         await driver.sleep(10000)
     }
 

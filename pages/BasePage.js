@@ -1,10 +1,11 @@
 const {Builder, By, until} = require("selenium-webdriver");
-
+const {TextUtils} = require("../utils/TextUtils");
+require('dotenv').config()
 
 let driver = new Builder()
-    .usingServer("http://localhost:4444/wd/hub")
+    .usingServer(process.env.SELENOID_URL)
     .withCapabilities({
-        "browserName": "chrome",
+        "browserName": "firefox",
         "version": "109.0",
         "selenoid:options": {
             "screenResolution": "1920x1024x24",
@@ -12,12 +13,12 @@ let driver = new Builder()
             "enableVideo": true,
         }})
     .build()
+driver.manage().window().maximize()
 
 
 class BasePage {
 
     constructor(timeout = 5000) {
-        require('dotenv').config()
         global.driver = driver;
         this.timeout = timeout
     }
@@ -75,6 +76,20 @@ class BasePage {
             console.log(`Элемент с селектором: "${selector}" не найден`)
             return 0
         }
+    }
+
+    async getTextOnElement(element) {
+        let text
+        if (element) {
+            text = await element.getText()
+        }
+        else {
+            // на случай если не поле заголовка не сможет найтись
+            text = await driver.executeScript(`return document.querySelector('span.story__title-link').textContent`)
+            text = JSON.stringify(text).replaceAll('"', '')
+            console.log(text)
+        }
+        return TextUtils.clearText(text)
     }
 
     async openPage(slug = '') {

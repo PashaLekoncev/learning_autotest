@@ -1,6 +1,7 @@
 const {BasePage} = require("./BasePage");
 const {By} = require("selenium-webdriver");
-const {Post} = require("../components");
+const {PostComponent} = require("../components/PostComponent");
+const {Post} = require("../models/Post");
 
 class FeedPage extends BasePage {
 
@@ -21,8 +22,8 @@ class FeedPage extends BasePage {
         if (posts.length >= countPost) {
             for (let i = 0; i < countPost; i++) {
                 let post = posts[i]
-                post = new Post(post)
-                post = await post.init()
+                let component = new PostComponent(post)
+                post = await Post.createByComponent(component)
                 postsArr.push(post)
             }
             return postsArr
@@ -30,7 +31,10 @@ class FeedPage extends BasePage {
             throw new Error('Нельзя прочитать больше постов чем есть на странице')
         }
     }
-
+    async searchPostTitle(title) {
+        let postTitle = await this.getTextOnElement(await this.waitPageElement(By.xpath, `//h2[@class="story__title"]`))
+        return postTitle === title
+    }
 
     async open(slag = FEEDS.hot) {
         await this.openPage(slag)

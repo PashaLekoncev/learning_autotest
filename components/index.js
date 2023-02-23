@@ -1,4 +1,4 @@
 module.exports = {
-    ...require('./Post'),
+    ...require('./PostComponent'),
     ...require('./Notifications'),
 }

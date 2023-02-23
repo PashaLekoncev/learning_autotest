@@ -1,23 +1,9 @@
 const {By} = require("selenium-webdriver");
 
 
-class Post {
+class PostComponent {
     constructor(root) {
         this.root = root
-    }
-
-    async init() {
-        this.id = await this.getIdPost()
-        this.link = await this.getLinkOfPost()
-        this.title = await this.getTitle()
-        this.authorId = await this.getAuthorId()
-        this.authorName = await this.getAuthorName()
-        this.authorLink = await this.getLinkOfAuthor()
-        this.content = await this.getContent()
-        this.tags = await this.getTags()
-        this.community = await this.getCommunityName()
-
-        return this
     }
 
     async getIdPost() {
@@ -99,5 +85,5 @@ class Post {
 }
 
 module.exports = {
-    Post
+    PostComponent
 }
